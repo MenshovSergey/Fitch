@@ -1,7 +1,7 @@
 digraph fitch_res{
-0 [style=filled,fillcolor="0.4 0.4 0.4"]
+0 [style=filled,fillcolor="0.2 0.2 0.2"]
 0->1;
-1 [style=filled,fillcolor="0.4 0.4 0.4"]
+1 [style=filled,fillcolor="0.2 0.2 0.2"]
 1->6;
 6 [style=filled,fillcolor="0.4 0.4 0.4"]
 1->11;
@@ -15,7 +15,7 @@ digraph fitch_res{
 2->5;
 5 [style=filled,fillcolor="0.2 0.2 0.2"]
 0->7;
-7 [style=filled,fillcolor="1.0 1.0 1.0"]
+7 [style=filled,fillcolor="0.2 0.2 0.2"]
 7->8;
 8 [style=filled,fillcolor="1.0 1.0 1.0"]
 8->10;

@@ -51,7 +51,7 @@ class Graph:
             return ""
 
     def get_label(self, v):
-        return str(list(self.R[v])).replace("[", "a").replace("]", "")
+        return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",","_").replace(" ","")
 
     def write_dfs(self, v, f):
         colour_v = self.get_color(v)
@@ -97,11 +97,11 @@ class Graph:
 
         intersection = self.R[self.data[v][0]]
         for k in self.data[v]:
-            intersection.intersection(self.R[k])
+            intersection = intersection.intersection(self.R[k])
         if len(intersection) == 0:
             res = set()
             for k in self.data[v]:
-                res.union(self.R[k])
+                res = res.union(self.R[k])
             self.R[v] = res
         else:
             self.R[v] = intersection
