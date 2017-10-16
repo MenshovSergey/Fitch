@@ -1,0 +1,16 @@
+digraph start{
+0->1;
+1->6;
+6 [style=filled,fillcolor="0.4 0.4 0.4"]
+1->11;
+0->2;
+2->3;
+2->4;
+4 [style=filled,fillcolor="0.2 0.2 0.2"]
+2->5;
+0->7;
+7->8;
+8->10;
+10 [style=filled,fillcolor="1.0 1.0 1.0"]
+7->9;
+}
