@@ -11,7 +11,6 @@ def visualize(graph, name):
     os.system("dot " + name + ".dot -Tpng -o " + name + ".png")
 
 
-# TODO
 def visualize_fitch_step1(graph, name):
     res = open(name + ".dot", "w")
     res.write("digraph " + name + "{\n")
@@ -48,4 +47,5 @@ def main(name_f):
     visualize(graph, "fitch_res")
 
 
-main("input.txt")
+# main("input.txt")
+main("test2.txt")
