@@ -5,7 +5,7 @@ import os
 def visualize(graph, name):
     res = open(name + ".dot", "w")
     res.write("digraph " + name + "{\n")
-    graph.write_dfs(graph.root, res)
+    graph.write_dfs_start(graph.root, res)
     res.write("}")
     res.close()
     os.system("dot " + name + ".dot -Tpng -o " + name + ".png")
@@ -41,11 +41,12 @@ def read_data(name_f):
 def main(name_f):
     graph = read_data(name_f)
     graph.find_root()
-    visualize(graph, "start")
+    visualize(graph, "start_"+name_f)
     graph.fitch()
-    visualize_fitch_step1(graph, "fitch_step_1")
-    visualize(graph, "fitch_res")
+    visualize_fitch_step1(graph, "fitch_step_1_"+name_f)
+    visualize(graph, "fitch_res_"+name_f)
 
 
 # main("input.txt")
-main("test2.txt")
+# main("test2.txt")
+main("cactus")

@@ -60,14 +60,21 @@ class Graph:
     def get_label(self, v):
         return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",","_").replace(" ","")
 
-    def write_dfs(self, v, f):
+    def write_dfs_start(self,v,f):
+        self.write_dfs(v,f,[-1] * len(self.colors))
+
+    def write_dfs(self, v, f,used):
+        if used[v] == -1:
+            used[v] = 1
+        else:
+            return
         colour_v = self.get_color(v)
         if colour_v != "":
             f.write(str(v) + colour_v + "\n")
 
         for t in self.data[v]:
             f.write(str(v) + "->" + str(t) + ";\n")
-            self.write_dfs(t, f)
+            self.write_dfs(t, f, used)
 
     def write_fitch_step1(self, v, f):
         colour_v = self.get_color(v)
@@ -111,6 +118,7 @@ class Graph:
             if most_common_colours[1][1] > 1:
                 print("for vertex v=" + str(v) + "found more 2 colours" + str(most_common_colours))
                 exit(-1)
+            #Есть два поддерева в которых один и тот же цвет
             elif most_common_colours[0][1] > 1:
                 self.R[v] = {most_common_colours[0][0]}
             else:

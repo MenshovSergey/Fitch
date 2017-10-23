@@ -1,25 +1,23 @@
 digraph fitch_step_1{
-a0a7 [style=filled,fillcolor="1.0 1.0 1.0"]
+a0a7 [style=filled,fillcolor="0.875 0.875 0.875"]
 a0a7->a1a4_7;
-a1a4_7 [style=filled,fillcolor="1.0 1.0 1.0"]
+a1a4_7 [style=filled,fillcolor="0.875 0.875 0.875"]
 a1a4_7->a6a7;
-a6a7 [style=filled,fillcolor="1.0 1.0 1.0"]
+a6a7 [style=filled,fillcolor="0.875 0.875 0.875"]
 a1a4_7->a11a4;
-a11a4 [style=filled,fillcolor="0.5714285714285714 0.5714285714285714 0.5714285714285714"]
+a11a4 [style=filled,fillcolor="0.5 0.5 0.5"]
 a0a7->a2a5_6_7;
-a2a5_6_7 [style=filled,fillcolor="1.0 1.0 1.0"]
+a2a5_6_7 [style=filled,fillcolor="0.875 0.875 0.875"]
 a2a5_6_7->a3a5;
-a3a5 [style=filled,fillcolor="0.7142857142857143 0.7142857142857143 0.7142857142857143"]
+a3a5 [style=filled,fillcolor="0.625 0.625 0.625"]
 a2a5_6_7->a4a7;
-a4a7 [style=filled,fillcolor="1.0 1.0 1.0"]
+a4a7 [style=filled,fillcolor="0.875 0.875 0.875"]
 a2a5_6_7->a5a6;
-a5a6 [style=filled,fillcolor="0.8571428571428571 0.8571428571428571 0.8571428571428571"]
-a0a7->a7a3;
-a7a3 [style=filled,fillcolor="0.42857142857142855 0.42857142857142855 0.42857142857142855"]
-a7a3->a8a3;
-a8a3 [style=filled,fillcolor="0.42857142857142855 0.42857142857142855 0.42857142857142855"]
+a5a6 [style=filled,fillcolor="0.75 0.75 0.75"]
+a0a7->a7a8_3;
+a7a8_3->a8a3;
 a8a3->a10a3;
-a10a3 [style=filled,fillcolor="0.42857142857142855 0.42857142857142855 0.42857142857142855"]
-a7a3->a9a3;
-a9a3 [style=filled,fillcolor="0.42857142857142855 0.42857142857142855 0.42857142857142855"]
+a10a3 [style=filled,fillcolor="0.375 0.375 0.375"]
+a7a8_3->a9a8;
+a9a8 [style=filled,fillcolor="1.0 1.0 1.0"]
 }
