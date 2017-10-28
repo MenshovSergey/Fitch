@@ -58,12 +58,12 @@ class Graph:
             return ""
 
     def get_label(self, v):
-        return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",","_").replace(" ","")
+        return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",", "_").replace(" ", "")
 
-    def write_dfs_start(self,v,f):
-        self.write_dfs(v,f,[-1] * len(self.colors))
+    def write_dfs_start(self, v, f):
+        self.write_dfs(v, f, [-1] * len(self.colors))
 
-    def write_dfs(self, v, f,used):
+    def write_dfs(self, v, f, used):
         if used[v] == -1:
             used[v] = 1
         else:
@@ -80,11 +80,11 @@ class Graph:
         colour_v = self.get_color(v)
         label_v = self.get_label(v)
         if colour_v != "":
-            f.write("a"+str(v) + label_v + colour_v + "\n")
+            f.write("a" + str(v) + label_v + colour_v + "\n")
 
         for t in self.data[v]:
             label_t = self.get_label(t)
-            f.write("a"+str(v) + label_v + "->" + "a"+str(t) + label_t + ";\n")
+            f.write("a" + str(v) + label_v + "->" + "a" + str(t) + label_t + ";\n")
             self.write_fitch_step1(t, f)
 
     def is_tree(self):
@@ -101,28 +101,46 @@ class Graph:
 
     def fitch_step1(self, v):
         if len(self.data[v]) == 0:
-            self.R[v] = {self.colors[v]}
+            self.R[v] = {self.colors[v]: 1}
             return
         for k in self.data[v]:
             self.fitch_step1(k)
-        intersection = Counter()
-        for k in self.data[v]:
-            intersection.update(list(self.R[k]))
 
-        #Ровно один цвет присутствует
+        intersection = {}
+        has_leaf = set()
+        # intersection = Counter()
+        for k in self.data[v]:
+            for ch, count in self.R[k].items():
+                if len(self.inverse_data[k]) > 1:
+                    count = -1
+                if ch in intersection:
+                    if count == 1:
+                        if not ch in has_leaf:
+                            has_leaf.add(ch)
+                            intersection[ch] = 1
+                        else:
+                            intersection[ch] += 1
+                    else:
+                        intersection[ch] = count
+                else:
+                    intersection[ch] = count
+                    if count == 1:
+                        has_leaf.add(ch)
+
+        # Ровно один цвет присутствует
         if len(intersection) == 1:
-            res = set(intersection.keys())
-            self.R[v] = res
+            self.R[v] = intersection
         else:
-            most_common_colours = intersection.most_common(2)
+            sort = sorted(intersection.items(), key=lambda x: abs(x[1]))
+            most_common_colours = sort[0:2]
             if most_common_colours[1][1] > 1:
                 print("for vertex v=" + str(v) + "found more 2 colours" + str(most_common_colours))
                 exit(-1)
-            #Есть два поддерева в которых один и тот же цвет
+            # Есть два поддерева в которых один и тот же цвет
             elif most_common_colours[0][1] > 1:
                 self.R[v] = {most_common_colours[0][0]}
             else:
-                self.R[v] = set(intersection.keys())
+                self.R[v] = intersection
 
     def fitch_step2(self, v, parent):
         if self.colors[parent] in self.R[v]:
