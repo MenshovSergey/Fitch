@@ -48,5 +48,5 @@ def main(name_f):
 
 
 # main("input.txt")
-# main("test2.txt")
-main("cactus")
+main("test3")
+# main("cactus")
