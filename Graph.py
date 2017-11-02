@@ -28,6 +28,11 @@ class Graph:
         self.data[a].append(b)
         self.inverse_data[b].append(a)
 
+    def add_vertex(self):
+        self.data.append([])
+        self.inverse_data.append([])
+        self.colors.append(-1)
+
     def add_color(self, n, c):
         self.colors[n] = c
         if c > self.max_color:
