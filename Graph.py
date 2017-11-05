@@ -30,6 +30,8 @@ class Graph:
 
     def add_vertex(self):
         self.data.append([])
+        self.R.append(set())
+        self.bad.append(set())
         self.inverse_data.append([])
         self.colors.append(-1)
 
@@ -106,7 +108,8 @@ class Graph:
     def find_forgot_colour(self, bad_counter, current_colour, v):
         if current_colour in bad_counter:
             bad_counter.pop(current_colour)
-        if bad_counter.most_common(1)[0][1] > 1:
+        most_common = bad_counter.most_common(1)
+        if len(most_common) > 0 and most_common[0][1] > 1:
             print("for vertex v = " +str(v)+" found 2 colours " + str(bad_counter.most_common(1)[0]))
             exit(-1)
 
@@ -137,7 +140,7 @@ class Graph:
         #Ровно один цвет присутствует
         if len(intersection) == 1:
             res = set(intersection.keys())
-            c = intersection.most_common(1)[0]
+            c = intersection.most_common(1)[0][0]
             self.find_forgot_colour(bad_counter, c, v)
             self.add_bad_vertex(v, c, list(intersection.keys()))
             self.R[v] = res

@@ -71,6 +71,9 @@ def newick_f(name_f):
     create_newick_graph(s, g)
     g.find_root()
     visualize(g, "start_" + name_f)
+    g.fitch()
+    visualize_fitch_step1(g, "fitch_step_1_" + name_f)
+    visualize(g, "fitch_res_" + name_f)
 
 
 def main(name_f):
@@ -82,7 +85,8 @@ def main(name_f):
     visualize(graph, "fitch_res_" + name_f)
 
 
-newick_f("test_newick")
+# newick_f("test_newick")
+newick_f("big_newick")
 
 # main("input.txt")
 # main("test/test3")
