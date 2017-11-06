@@ -38,15 +38,56 @@ def read_data(name_f):
     return graph
 
 
+def find_pos_semicolon(s):
+    c = 0
+    for i, v in enumerate(s):
+        if v == "(":
+            c += 1
+        if v == ")":
+            c -= 1
+        if v == "," and c == 0:
+            return i
+
+
+def create_newick_graph(s, g):
+    g.add_vertex()
+    cur = len(g.data) - 1
+    if s[0] == "(":
+        pos = find_pos_semicolon(s[1:-1])
+        l = create_newick_graph(s[1:pos+1], g)
+        r = create_newick_graph(s[pos + 2:-1], g)
+        g.add_edge(cur, l)
+        g.add_edge(cur, r)
+        return cur
+    else:
+        g.add_color(cur, int(s))
+        return cur
+
+
+def newick_f(name_f):
+    f = open(name_f, "r")
+    s = f.readline()
+    g = Graph()
+    create_newick_graph(s, g)
+    g.find_root()
+    visualize(g, "start_" + name_f)
+    g.fitch()
+    visualize_fitch_step1(g, "fitch_step_1_" + name_f)
+    visualize(g, "fitch_res_" + name_f)
+
+
 def main(name_f):
     graph = read_data(name_f)
     graph.find_root()
-    visualize(graph, "start_"+name_f)
+    visualize(graph, "start_" + name_f)
     graph.fitch()
-    visualize_fitch_step1(graph, "fitch_step_1_"+name_f)
-    visualize(graph, "fitch_res_"+name_f)
+    visualize_fitch_step1(graph, "fitch_step_1_" + name_f)
+    visualize(graph, "fitch_res_" + name_f)
 
+
+# newick_f("test_newick")
+newick_f("big_newick")
 
 # main("input.txt")
-# main("test2.txt")
-main("cactus")
+# main("test/test3")
+# main("cactus")

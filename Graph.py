@@ -8,15 +8,18 @@ class Graph:
             self.data = []
             self.inverse_data = []
             self.R = []
+            self.bad = []
             for i in range(vertex):
                 self.data.append([])
                 self.inverse_data.append([])
                 self.R.append(set())
+                self.bad.append(set())
         else:
             self.data = []
             self.colors = []
             self.inverse_data = []
             self.R = []
+            self.bad = []
         self.root = -1
         self.max_color = -1
         self.need_colors = {}
@@ -24,6 +27,13 @@ class Graph:
     def add_edge(self, a, b):
         self.data[a].append(b)
         self.inverse_data[b].append(a)
+
+    def add_vertex(self):
+        self.data.append([])
+        self.R.append(set())
+        self.bad.append(set())
+        self.inverse_data.append([])
+        self.colors.append(-1)
 
     def add_color(self, n, c):
         self.colors[n] = c
@@ -95,6 +105,20 @@ class Graph:
                 return False
         return True
 
+    def find_forgot_colour(self, bad_counter, current_colour, v):
+        if current_colour in bad_counter:
+            bad_counter.pop(current_colour)
+        most_common = bad_counter.most_common(1)
+        if len(most_common) > 0 and most_common[0][1] > 1:
+            print("for vertex v = " +str(v)+" found 2 colours " + str(bad_counter.most_common(1)[0]))
+            exit(-1)
+
+    def add_bad_vertex(self, v, c, intersection):
+        for k in intersection:
+             if k != c:
+                self.bad[v].add(k)
+
+
     def fitch(self):
         self.fitch_step1(self.root)
         self.fitch_step2(self.root, self.root)
@@ -102,16 +126,23 @@ class Graph:
     def fitch_step1(self, v):
         if len(self.data[v]) == 0:
             self.R[v] = {self.colors[v]}
+            self.add_bad_vertex(v, -1,list(self.R[v]))
             return
         for k in self.data[v]:
             self.fitch_step1(k)
         intersection = Counter()
+        bad_counter = Counter()
         for k in self.data[v]:
             intersection.update(list(self.R[k]))
+            self.bad[v] = self.bad[v].union(self.bad[k])
+            bad_counter.update(list(self.bad[k]))
 
         #Ровно один цвет присутствует
         if len(intersection) == 1:
             res = set(intersection.keys())
+            c = intersection.most_common(1)[0][0]
+            self.find_forgot_colour(bad_counter, c, v)
+            self.add_bad_vertex(v, c, list(intersection.keys()))
             self.R[v] = res
         else:
             most_common_colours = intersection.most_common(2)
@@ -121,8 +152,13 @@ class Graph:
             #Есть два поддерева в которых один и тот же цвет
             elif most_common_colours[0][1] > 1:
                 self.R[v] = {most_common_colours[0][0]}
+                c = most_common_colours[0][0]
+                self.find_forgot_colour(bad_counter, c, v)
+                self.add_bad_vertex(v, c, intersection)
             else:
                 self.R[v] = set(intersection.keys())
+                self.add_bad_vertex(v, -1, list(intersection.keys()))
+                self.find_forgot_colour(bad_counter,-1,v)
 
     def fitch_step2(self, v, parent):
         if self.colors[parent] in self.R[v]:
