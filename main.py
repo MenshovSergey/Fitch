@@ -14,7 +14,7 @@ def visualize(graph, name):
 def visualize_fitch_step1(graph, name):
     res = open(name + ".dot", "w")
     res.write("digraph " + name + "{\n")
-    graph.write_fitch_step1(graph.root, res)
+    graph.write_fitch_step1(graph.root, res, [-1] * len(graph.colors))
     res.write("}")
     res.close()
     os.system("dot " + name + ".dot -Tpng -o " + name + ".png")
@@ -41,10 +41,10 @@ def read_data(name_f):
 def main(name_f):
     graph = read_data(name_f)
     graph.find_root()
-    visualize(graph, "start_"+name_f)
+    visualize(graph, "start_" + name_f)
     graph.fitch()
-    visualize_fitch_step1(graph, "fitch_step_1_"+name_f)
-    visualize(graph, "fitch_res_"+name_f)
+    visualize_fitch_step1(graph, "fitch_step_1_" + name_f)
+    visualize(graph, "fitch_res_" + name_f)
 
 
 # main("input.txt")
