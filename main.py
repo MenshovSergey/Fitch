@@ -47,6 +47,6 @@ def main(name_f):
     visualize(graph, "fitch_res_" + name_f)
 
 
-# main("input.txt")
-# main("test2.txt")
-main("cactus")
+main("input")
+# main("test2")
+# main("cactus2")
