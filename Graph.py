@@ -136,7 +136,7 @@ class Graph:
 
             self.G[v] = (x-x).as_poly(x)
             for i in self.data[v]:
-                c = self.F[i] + self.H[i]
+                c = self.F[i] + self.G[i]
                 for j in self.data[v]:
                     if i != j:
                         c = c * (self.F[j] + self.H[j])

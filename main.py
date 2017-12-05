@@ -1,6 +1,8 @@
 from Graph import Graph
 import os
 
+from brute_force import brute_force
+
 
 def visualize(graph, name):
     res = open(name + ".dot", "w")
@@ -91,11 +93,20 @@ def calc(name_f):
     graph.calculate(graph.root)
     print(graph.F[0])
     print(graph.H[0])
+    print(graph.F[0] + graph.H[0])
     print("end")
 
+def run_brute_force(name_f):
+    graph = read_data(name_f)
+    graph.find_root()
+    visualize(graph, "start_" + name_f)
+    res = brute_force(graph)
+    print (res)
 
-# calc("test2")
-calc("one")
+
+# run_brute_force("brute1")
+calc("test2")
+# calc("one")
 # newick_f("test_newick")
 # newick_f("big_newick")
 
