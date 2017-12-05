@@ -86,8 +86,8 @@ def main(name_f):
 
 
 # newick_f("test_newick")
-newick_f("big_newick")
-
+# newick_f("big_newick")
+main("test3")
 # main("input.txt")
 # main("test/test3")
 # main("cactus")
