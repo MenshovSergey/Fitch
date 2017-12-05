@@ -1,5 +1,6 @@
 from collections import Counter
-
+from sympy import Poly, S
+from sympy.abc import a, x, y
 
 class Graph:
     def __init__(self, vertex=0):
@@ -9,6 +10,9 @@ class Graph:
             self.inverse_data = []
             self.R = []
             self.bad = []
+            self.F = {}
+            self.H = {}
+            self.G = {}
             for i in range(vertex):
                 self.data.append([])
                 self.inverse_data.append([])
@@ -118,6 +122,29 @@ class Graph:
              if k != c:
                 self.bad[v].add(k)
 
+    def calculate(self, v):
+        if len(self.data[v]) == 0:
+            self.F[v] = x.as_poly(x)
+            self.H[v] = (x-x).as_poly(x)
+            self.G[v] = (x-x).as_poly(x)
+        else:
+            for k in self.data[v]:
+                self.calculate(k)
+            self.H[v] = (x**0).as_poly(x)
+            for i in self.data[v]:
+                self.H[v] = self.H[v] * (self.F[i]+ self.H[i])
+
+            self.G[v] = (x-x).as_poly(x)
+            for i in self.data[v]:
+                c = self.F[i] + self.H[i]
+                for j in self.data[v]:
+                    if i != j:
+                        c = c * (self.F[j] + self.H[j])
+                self.G[v] = self.G[v] + c
+            self.F[v] = (x ** 0).as_poly(x)
+            for i in self.data[v]:
+                self.F[v] = self.F[v] * (self.F[i] + self.H[i] + (self.F[i] + self.G[i])/x)
+            self.F[v] = x.as_poly(x) * self.F[v] - x.as_poly(x) * self.H[v] - self.G[v]
 
     def fitch(self):
         self.fitch_step1(self.root)

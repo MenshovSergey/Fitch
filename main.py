@@ -84,9 +84,19 @@ def main(name_f):
     visualize_fitch_step1(graph, "fitch_step_1_" + name_f)
     visualize(graph, "fitch_res_" + name_f)
 
+def calc(name_f):
+    graph = read_data(name_f)
+    graph.find_root()
+    visualize(graph, "start_" + name_f)
+    graph.calculate(graph.root)
+    print(graph.F[0])
+    print(graph.H[0])
+    print("end")
 
+
+calc("test2")
 # newick_f("test_newick")
-newick_f("big_newick")
+# newick_f("big_newick")
 
 # main("input.txt")
 # main("test/test3")
