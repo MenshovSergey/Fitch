@@ -105,7 +105,8 @@ def run_brute_force(name_f):
 
 
 # run_brute_force("brute1")
-calc("test2")
+run_brute_force("brute2")
+# calc("test2")
 # calc("one")
 # newick_f("test_newick")
 # newick_f("big_newick")
