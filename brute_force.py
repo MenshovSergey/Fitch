@@ -22,12 +22,14 @@ def check_connectivity(g, v, used):
         if used[ch] == 0:
             check_connectivity(g, ch, used)
 
+
 def find_roots(g):
     res = []
     for i, k in enumerate(g.inverse_data):
         if len(k) == 0:
             res.append(i)
     return res
+
 
 def check_coloring(g, colors):
     for k in colors:
@@ -42,7 +44,7 @@ def check_coloring(g, colors):
         if len(roots) > 1:
             continue
         used = [0] * len(new_g.data)
-        check_connectivity(new_g, 0, used)
+        check_connectivity(new_g, roots[0], used)
         global count_v
         if not count_v == len(convert):
             count_v = 0
