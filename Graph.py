@@ -74,10 +74,10 @@ class Graph:
     def get_label(self, v):
         return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",","_").replace(" ","")
 
-    def write_dfs_start(self,v,f):
-        self.write_dfs(v,f,[-1] * len(self.colors))
+    def write_dfs_start(self,v,f, convert=None):
+        self.write_dfs(v,f,[-1] * len(self.colors), convert)
 
-    def write_dfs(self, v, f,used):
+    def write_dfs(self, v, f,used, convert):
         if used[v] == -1:
             used[v] = 1
         else:
@@ -87,8 +87,14 @@ class Graph:
             f.write(str(v) + colour_v + "\n")
 
         for t in self.data[v]:
-            f.write(str(v) + "->" + str(t) + ";\n")
-            self.write_dfs(t, f, used)
+            if convert is None:
+                f.write(str(v) + "->" + str(t) + ";\n")
+            else:
+                if not len(self.data[t]) == 0:
+                    f.write(str(v) + "->" + str(t) + ";\n")
+                else:
+                    f.write(str(v) + "->" + "\""+str(convert[t])+"\"" + ";\n")
+            self.write_dfs(t, f, used, convert)
 
     def write_fitch_step1(self, v, f):
         colour_v = self.get_color(v)

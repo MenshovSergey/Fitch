@@ -4,10 +4,13 @@ import os
 from brute_force import brute_force
 
 
-def visualize(graph, name):
+def visualize(graph, name, convert = None):
     res = open(name + ".dot", "w")
     res.write("digraph " + name + "{\n")
-    graph.write_dfs_start(graph.root, res)
+    if convert is not None:
+        graph.write_dfs_start(graph.root, res, convert)
+    else:
+        graph.write_dfs_start(graph.root, res)
     res.write("}")
     res.close()
     os.system("dot " + name + ".dot -Tpng -o " + name + ".png")
@@ -79,67 +82,99 @@ def newick_f(name_f):
 
 
 def parse_H(s):
+    print("print_H " + s)
     begin = s.index("[")
-    return s[1:(begin + 1)], int(s[begin + 1])
+    return s[1:begin], int(s[begin + 1])
 
 
-def get_number(v, vertex):
+def get_number(v, vertex, g):
+    print(v)
     if v in vertex:
         n = vertex[v]
     else:
+        g.add_vertex()
         n = len(vertex)
         vertex[v] = n
     return n
 
 
 def create_extended_newick_graph(s, g, vertex):
-    if s[0] == "(":
-        c = s.find(",")
-        # (A)#H1[1]|(A)
-        if c == -1:
-            last = s.find(")")
-            v = s[0:(last + 1)]
-            n = get_number(v, vertex)
-            if last == len(s):
-                return n, -1
-            h, direct = parse_H(s[last + 1])
-            h_n = get_number(h, vertex)
-            if direct == 1:
-                g.add_edge(h_n, n)
-            else:
-                g.add_edge(n, h_n)
-            return n, -1
+    if s[-1] == "]":
+        pos = s.rfind("#")
+        if pos > 0:
+            l, dl = create_extended_newick_graph(s[0:pos], g, vertex)
+            v,  d = parse_H(s[pos:])
+            v= get_number(v, vertex, g)
+            #TODO check direct
+            g.add_edge(l, v)
+            # if d == 2:
+            #     g.add_edge(l, v)
+            # else:
+            #     g.add_edge(v, l)
+            return l, -1
         else:
-            pos = find_pos_semicolon(s[1:-1])
-            l, dl = create_extended_newick_graph(s[1:pos + 1], g, vertex)
-            r, dr = create_extended_newick_graph(s[pos + 2:-1], g, vertex)
-            cur = len(vertex)
-            vertex[cur] = "new vertex"
-            if dl == 1:
-                g.add_edge(cur, l)
-            else:
-                g.add_edge(l, cur)
-            g.add_edge(cur, r)
-            return cur, -1
+            v, d = parse_H(s[pos:])
+            v = get_number(v, vertex, g)
+            return v, d
+        pass
     else:
-        c = s.find("#")
-        if c == -1:
-            return parse_H(s)
+        if s[0] == "(":
+            c = s.find(",")
+            # (A)#H1[1]|(A)
+            if c == -1:
+                last = s.find(")")
+                v = s[1:last]
+                n = get_number(v, vertex, g)
+                if last == len(s) - 1:
+                    return n, -1
+                h, direct = parse_H(s[last + 1:])
+                h_n = get_number(h, vertex, g)
+                if direct == 1:
+                    g.add_edge(h_n, n)
+                else:
+                    g.add_edge(n, h_n)
+                return n, -1
+            else:
+                c_br = 1
+                while True:
+                    pos = find_pos_semicolon(s[c_br:-c_br])
+                    if pos is not None:
+                        break
+                    c_br += 1
+                l, dl = create_extended_newick_graph(s[c_br:c_br + pos], g, vertex)
+                r, dr = create_extended_newick_graph(s[c_br + pos + 1:-c_br], g, vertex)
+                cur = len(vertex)
+                vertex[cur] = "new vertex"
+                g.add_vertex()
+                g.add_edge(cur, l)
+                g.add_edge(cur, r)
+                return cur, -1
         else:
-            return get_number(s, vertex), -1
+            c = s.find("#")
+            if c != -1:
+                v, n = parse_H(s)
+
+                return get_number(v, vertex, g), n
+            else:
+                return get_number(s, vertex, g), -1
 
 
 def newick_ext_f(name_f):
     f = open(name_f, "r")
     res = []
-    for s in f.readlines():
+    for i, s in enumerate(f.readlines()):
         g = Graph()
-        create_extended_newick_graph(s, g, {})
+        print("new string")
+        convert = {}
+        create_extended_newick_graph(s, g, convert)
         g.find_root()
-        visualize(g, "start_" + name_f)
-        g.fitch()
-        visualize_fitch_step1(g, "fitch_step_1_" + name_f)
-        visualize(g, "fitch_res_" + name_f)
+        rev_convert = {}
+        for (k, v) in convert.items():
+            rev_convert[v] = k
+        visualize(g, "start_" + name_f + str(i), rev_convert)
+        # g.fitch()
+        # visualize_fitch_step1(g, "fitch_step_1_" + name_f)
+        # visualize(g, "fitch_res_" + name_f)
         res.append(g)
 
 
@@ -171,8 +206,9 @@ def run_brute_force(name_f):
     print(res)
 
 
+newick_ext_f("ext_newick")
 # run_brute_force("brute1")
-run_brute_force("brute2")
+# run_brute_force("brute2")
 # calc("test2")
 # calc("one")
 # newick_f("test_newick")
