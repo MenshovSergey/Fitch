@@ -42,7 +42,7 @@ def check_coloring(g, colors):
         cut_and_create_new_graph(g, k, new_g, 0, convert, used)
         roots = find_roots(new_g)
         if len(roots) > 1:
-            continue
+            return 0
         used = [0] * len(new_g.data)
         check_connectivity(new_g, roots[0], used)
         global count_v
