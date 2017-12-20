@@ -206,8 +206,9 @@ def run_brute_force(name_f):
     print(res)
 
 
-newick_ext_f("ext_newick")
+# newick_ext_f("ext_newick")
 # run_brute_force("brute1")
+run_brute_force("brute3")
 # run_brute_force("brute2")
 # calc("test2")
 # calc("one")
