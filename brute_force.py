@@ -1,15 +1,12 @@
 from Graph import Graph
-import sys
 
-
-# sys.setrecursionlimit(150)
 
 def cut_and_create_new_graph(g, color, new_graph, v, convert, used):
     used[v] = 1
     for ch in g.data[v]:
         if g.colors[ch] == color and g.colors[v] == color:
             new_graph.add_edge(convert[v], convert[ch])
-            new_graph.add_edge(convert[ch], convert[v])
+            # new_graph.add_edge(convert[ch], convert[v])
         if used[ch] == 0:
             cut_and_create_new_graph(g, color, new_graph, ch, convert, used)
 
@@ -25,6 +22,12 @@ def check_connectivity(g, v, used):
         if used[ch] == 0:
             check_connectivity(g, ch, used)
 
+def find_roots(g):
+    res = []
+    for i, k in enumerate(g.inverse_data):
+        if len(k) == 0:
+            res.append(i)
+    return res
 
 def check_coloring(g, colors):
     for k in colors:
@@ -35,6 +38,9 @@ def check_coloring(g, colors):
         new_g = Graph(len(convert))
         used = [0] * len(g.colors)
         cut_and_create_new_graph(g, k, new_g, 0, convert, used)
+        roots = find_roots(new_g)
+        if len(roots) > 1:
+            continue
         used = [0] * len(new_g.data)
         check_connectivity(new_g, 0, used)
         global count_v
