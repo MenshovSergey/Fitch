@@ -73,7 +73,7 @@ def F(g, v, colours, answer, color=None):
             default_color = color
 
         s = ["0"] * len(g.data[v])
-        for k in range(2, len(g.data[v])):#+1
+        for k in range(2, len(g.data[v])+1):
             for i in range(k):
                 s[i] = "1"
             s = "".join(s)
