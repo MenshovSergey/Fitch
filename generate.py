@@ -41,10 +41,10 @@ def get_all_split(default_colour, colours, convert_k, convert_children):
         for p in it.permutations(s):
             child_colours = get_colours(p)
             res = {}
-            for i in convert_k:
-                if i in not_empty:
+            for i, v in enumerate(convert_k):
+                if v in not_empty:
                     child_colours[i].append(default_colour)
-                    res[convert_k[i]] = child_colours[i]
+                    res[v] = child_colours[i]
                 else:
                     res[convert_k[i]] = [default_colour]
             for i in range(len(not_empty), count_children):

@@ -212,7 +212,7 @@ def gen(name_f):
     visualize(graph, "start_" + name_f)
     generate(graph)
 
-gen("test2")
+gen("test3")
 # newick_ext_f("ext_newick")
 # run_brute_force("brute1")
 # run_brute_force("brute3")
