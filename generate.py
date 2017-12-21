@@ -20,6 +20,38 @@ def get_colours(s):
     return res
 
 
+def get_count_not_empty(current):
+    res = []
+    for i, v in enumerate(current):
+        if v == "1":
+            res.append(i)
+    return res
+
+
+def get_all_split(default_colour, colours, convert_k, convert_children):
+    # 0 if set of colour is empty and need default colour
+    count_children = len(convert_children)
+    k = len(convert_k)
+    for current in it.product("01", repeat=k):
+        s = ["0"] * len(colours)
+        not_empty = get_count_not_empty(current)
+        for i in range(count_children + len(not_empty)):
+            s[i] = "1"
+        s = "".join(s)
+        for p in it.permutations(s):
+            child_colours = get_colours(p)
+            res = {}
+            for i in convert_k:
+                if i in not_empty:
+                    child_colours[i].append(default_colour)
+                    res[convert_k[i]] = child_colours[i]
+                else:
+                    res[convert_k[i]] = [default_colour]
+            for i in range(len(not_empty), count_children):
+                res[convert_children[i - len(not_empty)]] = child_colours[i]
+            yield res
+
+
 def F(g, v, colours, answer, color=None):
     if len(g.data[v]) == 0:
         if not color is None:
@@ -34,35 +66,76 @@ def F(g, v, colours, answer, color=None):
                 else:
                     answer[v] = [colours[0]]
     else:
-        for i in range(0, len(g.data[v])):
-            for j in range(i, len(g.data[v])):
+        if color == None:
+            default_color = colours[0]
+            colours = colours[1:]
+        else:
+            default_color = color
 
-    return
+        s = ["0"] * len(g.data[v])
+        for k in range(2, len(g.data[v])):#+1
+            for i in range(k):
+                s[i] = "1"
+            s = "".join(s)
+            for p in it.permutations(s):
+                convert_k = []
+                convert_children = []
+                for i, v in enumerate(p):
+                    if v == "1":
+                        convert_k.append(i)
+                    else:
+                        convert_children.append(i)
+                for res in get_all_split(default_color, colours, convert_k, convert_children):
+                    for k, val in res.items():
+                        if default_color in val:
+                            F(g, k, colours, answer, default_color)
+                            G(g, k, colours, answer, default_color)
+                        else:
+                            F(g, k, colours, answer, default_color)
+                            H(g, k, colours, answer)
 
 
 def G(g, v, colours, answer, color=None):
     if len(g.data[v]) == 0:
         return
-    for ch in g.data[v]:
-        # TODO maybe split on colours
-        s = ["0"] * (len(colours) -1)
-        for i in range(len(g.data[v])):
-            s[i] = "1"
-        if color is None:
-            G(g, ch, colours, answer, colours[0])
-            F(g, ch, colours, answer, colours[0])
-        else:
-            G(g, ch, colours, answer, color)
-            F(g, ch, colours, answer, color)
-        for i in g.data[v]:
-            if i != ch:
-                if not color is None:
-                    H(g, v, answer, colours[1:])
-                    F(g, v, colours, answer, colours[0])
+
+    if color == None:
+        default_color = colours[0]
+        colours = colours[1:]
+    else:
+        default_color = color
+
+    for i, ch in enumerate(g.data[v]):
+        s = ["0"] * (len(colours) - 1)
+        s[0] = "1"
+        convert_k = [ch]
+        convert_children = []
+        for j in g.data[v]:
+            if j != ch:
+                convert_children.append(j)
+        for res in get_all_split(default_color, colours, convert_k, convert_children):
+            for k, val in res.items():
+                if default_color in val:
+                    F(g, k, colours, answer, default_color)
+                    G(g, k, colours, answer, default_color)
                 else:
-                    H(g, v, answer, colours)
-                    F(g, v, colours, answer, color)
-    pass
+                    F(g, k, colours, answer, default_color)
+                    H(g, k, colours, answer)
+
+        # if color is None:
+        #     G(g, ch, colours, answer, colours[0])
+        #     F(g, ch, colours, answer, colours[0])
+        # else:
+        #     G(g, ch, colours, answer, color)
+        #     F(g, ch, colours, answer, color)
+        # for i in g.data[v]:
+        #     if i != ch:
+        #         if not color is None:
+        #             H(g, v, answer, colours[1:])
+        #             F(g, v, colours, answer, colours[0])
+        #         else:
+        #             H(g, v, answer, colours)
+        #             F(g, v, colours, answer, color)
 
 
 def H(g, v, answer, colours):
@@ -82,3 +155,9 @@ def H(g, v, answer, colours):
 def generate(g):
     count_colors = get_count_leaves(g)
     colours = [i for i in range(count_colors)]
+    answer = {}
+    F(g, 0, colours, answer)
+    G(g,0, colours, answer)
+    H(g,0, answer, colours)
+    print(len(list(answer.values())[0]))
+

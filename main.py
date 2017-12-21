@@ -2,6 +2,7 @@ from Graph import Graph
 import os
 
 from brute_force import brute_force
+from generate import generate
 
 
 def visualize(graph, name, convert = None):
@@ -205,10 +206,16 @@ def run_brute_force(name_f):
     res = brute_force(graph)
     print(res)
 
+def gen(name_f):
+    graph = read_data(name_f)
+    graph.find_root()
+    visualize(graph, "start_" + name_f)
+    generate(graph)
 
+gen("test2")
 # newick_ext_f("ext_newick")
 # run_brute_force("brute1")
-run_brute_force("brute3")
+# run_brute_force("brute3")
 # run_brute_force("brute2")
 # calc("test2")
 # calc("one")
