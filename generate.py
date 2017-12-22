@@ -9,11 +9,11 @@ def get_count_leaves(g):
     return res
 
 
-def get_colours(s):
+def get_colours(s, colours):
     res = []
     cur = []
     for i, v in enumerate(list(s)):
-        cur.append(i)
+        cur.append(colours[i])
         if v == "1":
             res.append(cur)
             cur = []
@@ -21,10 +21,10 @@ def get_colours(s):
 
 
 def get_count_not_empty(current):
-    res = []
-    for i, v in enumerate(current):
+    res = {}
+    for i, v in enumerate(list(current)):
         if v == "1":
-            res.append(i)
+            res[i] = len(res)
     return res
 
 
@@ -34,17 +34,17 @@ def get_all_split(default_colour, colours, convert_k, convert_children):
     k = len(convert_k)
     for current in it.product("01", repeat=k):
         s = ["0"] * len(colours)
-        not_empty = get_count_not_empty(list(current))
+        not_empty = get_count_not_empty(current)
         for i in range(count_children + len(not_empty)):
             s[i] = "1"
         s = "".join(s)
         for p in set(it.permutations(s)):
-            child_colours = get_colours(p)
+            child_colours = get_colours(p, colours)
             res = {}
             for i, v in enumerate(convert_k):
-                if v in not_empty:
-                    child_colours[i].append(default_colour)
-                    res[v] = child_colours[i]
+                if i in not_empty:
+                    child_colours[not_empty[i]].append(default_colour)
+                    res[v] = child_colours[not_empty[i]]
                 else:
                     res[v] = [default_colour]
             for i in range(len(not_empty), count_children):
@@ -55,11 +55,8 @@ def get_all_split(default_colour, colours, convert_k, convert_children):
 def F(g, v, colours, answer, color=None):
     if len(g.data[v]) == 0:
         if not color is None:
-            if v in answer:
-                answer[v].append(color)
-            else:
-                answer[v] = [color]
-            print(answer[v])
+            return [{v: color}]
+
         else:
             if len(colours) == 1:
                 if v in answer:
@@ -86,7 +83,9 @@ def F(g, v, colours, answer, color=None):
                         convert_k.append(g.data[v][i])
                     else:
                         convert_children.append(g.data[v][i])
+                all_coloring = []
                 for res in get_all_split(default_color, colours, convert_k, convert_children):
+                    current_coloring = None
                     for k, val in res.items():
                         if default_color in val:
                             F(g, k, colours, answer, default_color)
@@ -123,6 +122,7 @@ def G(g, v, colours, answer, color=None):
                     F(g, k, colours, answer, default_color)
                     H(g, k, colours, answer)
 
+
 def H(g, v, colours, answer):
     if len(g.data[v]) == 0:
         return
@@ -131,7 +131,7 @@ def H(g, v, colours, answer):
         s[i] = "1"
     s = "".join(s)
     for p in it.permutations(s):
-        child_colours = get_colours(p)
+        child_colours = get_colours(p, colours)
         for i, v in enumerate(g.data[v]):
             H(g, v, child_colours[i], answer)
             F(g, v, child_colours[i], answer)
