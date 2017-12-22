@@ -46,7 +46,7 @@ def get_all_split(default_colour, colours, convert_k, convert_children):
                     child_colours[i].append(default_colour)
                     res[v] = child_colours[i]
                 else:
-                    res[convert_k[i]] = [default_colour]
+                    res[v] = [default_colour]
             for i in range(len(not_empty), count_children):
                 res[convert_children[i - len(not_empty)]] = child_colours[i]
             yield res
@@ -80,11 +80,11 @@ def F(g, v, colours, answer, color=None):
             for p in it.permutations(s):
                 convert_k = []
                 convert_children = []
-                for i, v in enumerate(p):
-                    if v == "1":
-                        convert_k.append(i)
+                for i, val in enumerate(list(p)):
+                    if val == "1":
+                        convert_k.append(g.data[v][i])
                     else:
-                        convert_children.append(i)
+                        convert_children.append(g.data[v][i])
                 for res in get_all_split(default_color, colours, convert_k, convert_children):
                     for k, val in res.items():
                         if default_color in val:
