@@ -38,7 +38,7 @@ def get_all_split(default_colour, colours, convert_k, convert_children):
         for i in range(count_children + len(not_empty)):
             s[i] = "1"
         s = "".join(s)
-        for p in it.permutations(s):
+        for p in set(it.permutations(s)):
             child_colours = get_colours(p)
             res = {}
             for i, v in enumerate(convert_k):
@@ -78,7 +78,7 @@ def F(g, v, colours, answer, color=None):
             for i in range(k):
                 s[i] = "1"
             s = "".join(s)
-            for p in it.permutations(s):
+            for p in set(it.permutations(s)):
                 convert_k = []
                 convert_children = []
                 for i, val in enumerate(list(p)):
