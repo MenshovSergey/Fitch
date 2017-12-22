@@ -12,7 +12,7 @@ def get_count_leaves(g):
 def get_colours(s):
     res = []
     cur = []
-    for i, v in enumerate(s):
+    for i, v in enumerate(list(s)):
         cur.append(i)
         if v == "1":
             res.append(cur)
@@ -34,7 +34,7 @@ def get_all_split(default_colour, colours, convert_k, convert_children):
     k = len(convert_k)
     for current in it.product("01", repeat=k):
         s = ["0"] * len(colours)
-        not_empty = get_count_not_empty(current)
+        not_empty = get_count_not_empty(list(current))
         for i in range(count_children + len(not_empty)):
             s[i] = "1"
         s = "".join(s)
@@ -59,6 +59,7 @@ def F(g, v, colours, answer, color=None):
                 answer[v].append(color)
             else:
                 answer[v] = [color]
+            print(answer[v])
         else:
             if len(colours) == 1:
                 if v in answer:
@@ -72,7 +73,7 @@ def F(g, v, colours, answer, color=None):
         else:
             default_color = color
 
-        for k in range(2, len(g.data[v])+1):
+        for k in range(2, len(g.data[v]) + 1):
             s = ["0"] * len(g.data[v])
             for i in range(k):
                 s[i] = "1"
@@ -122,23 +123,7 @@ def G(g, v, colours, answer, color=None):
                     F(g, k, colours, answer, default_color)
                     H(g, k, colours, answer)
 
-        # if color is None:
-        #     G(g, ch, colours, answer, colours[0])
-        #     F(g, ch, colours, answer, colours[0])
-        # else:
-        #     G(g, ch, colours, answer, color)
-        #     F(g, ch, colours, answer, color)
-        # for i in g.data[v]:
-        #     if i != ch:
-        #         if not color is None:
-        #             H(g, v, answer, colours[1:])
-        #             F(g, v, colours, answer, colours[0])
-        #         else:
-        #             H(g, v, answer, colours)
-        #             F(g, v, colours, answer, color)
-
-
-def H(g, v, answer, colours):
+def H(g, v, colours, answer):
     if len(g.data[v]) == 0:
         return
     s = ["0"] * len(colours)
@@ -157,7 +142,6 @@ def generate(g):
     colours = [i for i in range(count_colors)]
     answer = {}
     F(g, 0, colours, answer)
-    G(g,0, colours, answer)
-    H(g,0, answer, colours)
+    G(g, 0, colours, answer)
+    H(g, 0, colours, answer)
     print(len(list(answer.values())[0]))
-
