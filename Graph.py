@@ -1,6 +1,6 @@
 from collections import Counter
 
-
+from sympy.abc import x
 class Graph:
     def __init__(self, vertex=0):
         if vertex > 0:
@@ -9,6 +9,9 @@ class Graph:
             self.inverse_data = []
             self.R = []
             self.bad = []
+            self.F = {}
+            self.H = {}
+            self.G = {}
             for i in range(vertex):
                 self.data.append([])
                 self.inverse_data.append([])
@@ -169,7 +172,7 @@ class Graph:
         for t in self.data[v]:
             self.fitch_step2(t, v)
 
-        def calculate(self, v):
+    def calculate(self, v):
         if len(self.data[v]) == 0:
             self.F[v] = x.as_poly(x)
             self.H[v] = (x-x).as_poly(x)

@@ -55,7 +55,7 @@ def create_newick_graph(s, g):
     cur = len(g.data) - 1
     if s[0] == "(":
         pos = find_pos_semicolon(s[1:-1])
-        l = create_newick_graph(s[1:pos+1], g)
+        l = create_newick_graph(s[1:pos + 1], g)
         r = create_newick_graph(s[pos + 2:-1], g)
         g.add_edge(cur, l)
         g.add_edge(cur, r)
@@ -77,7 +77,6 @@ def newick_f(name_f):
     visualize(g, "fitch_res_" + name_f)
 
 
-
 # def main(name_f):
 #     graph = read_data(name_f)
 #     graph.find_root()
@@ -90,6 +89,7 @@ def newick_f(name_f):
 def read_only_graph(name):
     pass
 
+
 def fitch(g, need_draw, name_f):
     if need_draw:
         visualize(g, "start_" + name_f)
@@ -97,6 +97,7 @@ def fitch(g, need_draw, name_f):
     if need_draw:
         visualize_fitch_step1(g, "fitch_step_1_" + name_f)
         visualize(g, "fitch_res_" + name_f)
+
 
 def main(name_f, format, target, draw):
     if format == "CE":
@@ -106,14 +107,31 @@ def main(name_f, format, target, draw):
     elif format == "N":
         g = newick_f(name_f)
     else:
-        print("Unknown format" + format)
+        print("Unknown format " + format)
         return -1
     if target == "fitch":
+        if not (format == "CE" or format == "N"):
+            print("For fitch need only CE and N format")
         fitch(g, draw, name_f)
     elif target == "calc":
+        if draw:
+            visualize(g, "start_" + name_f)
+        g.calculate(g.root)
+        print("F(root) = " + str(g.F[g.root]))
+        print("H(root) = " + str(g.H[g.root]))
+        print("G(root) = " + str(g.G[g.root]))
+        print("F(root) + H(root) = " + str(g.F[g.root] + g.H[g.root]))
+    elif target == "brute":
         pass
+    elif target == "calc_network_cactus":
+        pass
+    else:
+        print("Unknown target" + target)
+        return -1
+
 
 import argparse
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--target")
 parser.add_argument("--format")
@@ -122,7 +140,7 @@ parser.add_argument("--name")
 
 args = vars(parser.parse_args())
 
-main(args["name"],args["format"], args["target"], args["draw"])
+main(args["name"], args["format"], args["target"], args["draw"])
 
 # newick_f("test_newick")
 # newick_f("big_newick")
