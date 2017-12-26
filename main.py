@@ -35,6 +35,7 @@ def read_data(name_f):
     for i in range(count_color):
         n, c = f.readline().split(" ")
         graph.add_color(int(n), int(c))
+    graph.find_root()
     return graph
 
 
@@ -76,18 +77,56 @@ def newick_f(name_f):
     visualize(g, "fitch_res_" + name_f)
 
 
-def main(name_f):
-    graph = read_data(name_f)
-    graph.find_root()
-    visualize(graph, "start_" + name_f)
-    graph.fitch()
-    visualize_fitch_step1(graph, "fitch_step_1_" + name_f)
-    visualize(graph, "fitch_res_" + name_f)
 
+# def main(name_f):
+#     graph = read_data(name_f)
+#     graph.find_root()
+#     visualize(graph, "start_" + name_f)
+#     graph.fitch()
+#     visualize_fitch_step1(graph, "fitch_step_1_" + name_f)
+#     visualize(graph, "fitch_res_" + name_f)
+
+
+def read_only_graph(name):
+    pass
+
+def fitch(g, need_draw, name_f):
+    if need_draw:
+        visualize(g, "start_" + name_f)
+    g.fitch()
+    if need_draw:
+        visualize_fitch_step1(g, "fitch_step_1_" + name_f)
+        visualize(g, "fitch_res_" + name_f)
+
+def main(name_f, format, target, draw):
+    if format == "CE":
+        g = read_data(name_f)
+    elif format == "E":
+        g = read_only_graph(name_f)
+    elif format == "N":
+        g = newick_f(name_f)
+    else:
+        print("Unknown format" + format)
+        return -1
+    if target == "fitch":
+        fitch(g, draw, name_f)
+    elif target == "calc":
+        pass
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--target")
+parser.add_argument("--format")
+parser.add_argument("--draw", type=bool)
+parser.add_argument("--name")
+
+args = vars(parser.parse_args())
+
+main(args["name"],args["format"], args["target"], args["draw"])
 
 # newick_f("test_newick")
 # newick_f("big_newick")
-main("test3")
+# main("test3")
 # main("input.txt")
 # main("test/test3")
 # main("cactus")
