@@ -17,3 +17,7 @@ This program have 4 parameters:
         False = nothing draw
     name:
         name of input file
+
+Run example
+
+python3 --target=calc --format=CE --draw=True --name=test2
