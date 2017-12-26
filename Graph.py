@@ -168,3 +168,27 @@ class Graph:
                 self.colors[v] = list(self.R[v])[0]
         for t in self.data[v]:
             self.fitch_step2(t, v)
+
+        def calculate(self, v):
+        if len(self.data[v]) == 0:
+            self.F[v] = x.as_poly(x)
+            self.H[v] = (x-x).as_poly(x)
+            self.G[v] = (x-x).as_poly(x)
+        else:
+            for k in self.data[v]:
+                self.calculate(k)
+            self.H[v] = (x**0).as_poly(x)
+            for i in self.data[v]:
+                self.H[v] = self.H[v] * (self.F[i]+ self.H[i])
+
+            self.G[v] = (x-x).as_poly(x)
+            for i in self.data[v]:
+                c = self.F[i] + self.G[i]
+                for j in self.data[v]:
+                    if i != j:
+                        c = c * (self.F[j] + self.H[j])
+                self.G[v] = self.G[v] + c
+            self.F[v] = (x ** 0).as_poly(x)
+            for i in self.data[v]:
+                self.F[v] = self.F[v] * (self.F[i] + self.H[i] + (self.F[i] + self.G[i])/x)
+            self.F[v] = x.as_poly(x) * self.F[v] - x.as_poly(x) * self.H[v] - self.G[v]
