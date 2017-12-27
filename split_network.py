@@ -68,15 +68,15 @@ def tree_variations(network):
 
 
 if __name__ == '__main__':
-    network_list = eNewick_to_graph("test.tree")
+    network_list = eNewick_to_graph("finalnets.tree")
     # for topology in network_list:
     #     leaves_number = topology.get_leaves()
     #     t = time.time()
     #     print(run_brute_force(topology, leaves_number))
     #     print("timing  ", time.time() - t)
 
-    network_list[0].find_root()
-    visualize(network_list[0], "network14")
+    # network_list[0].find_root()
+    # visualize(network_list[0], "network14")
     for i in network_list:
         all_answer = set([])
         for tree in tree_variations(i):

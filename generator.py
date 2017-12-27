@@ -245,7 +245,7 @@ def gen_coloring(G):
     for k in range(max_k):
         all_results = dict()
 
-        Fc, Gc, Hc = all_color(G, 0, list(range(k + 1)), all_results)
+        Fc, Gc, Hc = all_color(G, G.root, list(range(k + 1)), all_results)
         print(k + 1, len(Fc) + len(Hc))
         for ff in Fc:
             all_colorings.append(dict_to_tuple(ff))
