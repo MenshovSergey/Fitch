@@ -1,5 +1,8 @@
-from Graph import Graph
 import os
+
+from Graph import Graph
+from brute_force_n import brute_force
+from split_network import calculate_colorings
 
 
 def visualize(graph, name):
@@ -35,7 +38,28 @@ def read_data(name_f):
     for i in range(count_color):
         n, c = f.readline().split(" ")
         graph.add_color(int(n), int(c))
+    graph.find_root()
     return graph
+
+
+def read_graph_colors(name_f):
+    f = open(name_f, "r")
+    n, m, count_color = f.readline().split(" ")
+    n = int(n)
+    m = int(m)
+    count_color = int(count_color)
+    graph = Graph(m)
+    for i in range(n):
+        a, b = f.readline().split(" ")
+        graph.add_edge(int(a), int(b))
+
+    f.readline()
+    colors = {}
+    for i in range(count_color):
+        n, c = f.readline().split(" ")
+        colors[n] = c
+    graph.find_root()
+    return graph, colors
 
 
 def find_pos_semicolon(s):
@@ -54,7 +78,7 @@ def create_newick_graph(s, g):
     cur = len(g.data) - 1
     if s[0] == "(":
         pos = find_pos_semicolon(s[1:-1])
-        l = create_newick_graph(s[1:pos+1], g)
+        l = create_newick_graph(s[1:pos + 1], g)
         r = create_newick_graph(s[pos + 2:-1], g)
         g.add_edge(cur, l)
         g.add_edge(cur, r)
@@ -76,18 +100,67 @@ def newick_f(name_f):
     visualize(g, "fitch_res_" + name_f)
 
 
-def main(name_f):
-    graph = read_data(name_f)
-    graph.find_root()
-    visualize(graph, "start_" + name_f)
-    graph.fitch()
-    visualize_fitch_step1(graph, "fitch_step_1_" + name_f)
-    visualize(graph, "fitch_res_" + name_f)
+def read_only_graph(name):
+    pass
 
+
+def fitch(g, need_draw, name_f):
+    if need_draw:
+        visualize(g, "start_" + name_f)
+    g.fitch()
+    if need_draw:
+        visualize_fitch_step1(g, "fitch_step_1_" + name_f)
+        visualize(g, "fitch_res_" + name_f)
+
+
+def main(name_f, format, target, draw):
+    if format == "CE":
+        g = read_data(name_f)
+    elif format == "E":
+        g = read_only_graph(name_f)
+    elif format == "N":
+        g = newick_f(name_f)
+    else:
+        print("Unknown format " + format)
+        return -1
+    if target == "fitch":
+        if not (format == "CE" or format == "N"):
+            print("For fitch need only CE and N format")
+        fitch(g, draw, name_f)
+    elif target == "calc":
+        if draw:
+            visualize(g, "start_" + name_f)
+        g.calculate(g.root)
+        print("F(root) = " + str(g.F[g.root]))
+        print("H(root) = " + str(g.H[g.root]))
+        print("G(root) = " + str(g.G[g.root]))
+        print("F(root) + H(root) = " + str(g.F[g.root] + g.H[g.root]))
+    elif target == "brute":
+        g, colors = read_graph_colors(name_f)
+        c = brute_force(g, colors)
+        print("count convex coloring = " + str(c))
+    elif target == "calc_network_cactus":
+        calculate_colorings(name_f)
+    else:
+        print("Unknown target" + target)
+        return -1
+
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--target")
+parser.add_argument("--format")
+parser.add_argument("--draw", type=bool)
+parser.add_argument("--name")
+
+args = vars(parser.parse_args())
+
+main(args["name"], args["format"], args["target"], args["draw"])
 
 # newick_f("test_newick")
-newick_f("big_newick")
-
+# newick_f("big_newick")
+# main("test3")
 # main("input.txt")
 # main("test/test3")
 # main("cactus")

@@ -1,6 +1,6 @@
 from collections import Counter
 
-
+from sympy.abc import x
 class Graph:
     def __init__(self, vertex=0):
         if vertex > 0:
@@ -9,6 +9,9 @@ class Graph:
             self.inverse_data = []
             self.R = []
             self.bad = []
+            self.F = {}
+            self.H = {}
+            self.G = {}
             for i in range(vertex):
                 self.data.append([])
                 self.inverse_data.append([])
@@ -68,12 +71,12 @@ class Graph:
             return ""
 
     def get_label(self, v):
-        return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",","_").replace(" ","")
+        return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",", "_").replace(" ", "")
 
-    def write_dfs_start(self,v,f):
-        self.write_dfs(v,f,[-1] * len(self.colors))
+    def write_dfs_start(self, v, f):
+        self.write_dfs(v, f, [-1] * len(self.colors))
 
-    def write_dfs(self, v, f,used):
+    def write_dfs(self, v, f, used):
         if used[v] == -1:
             used[v] = 1
         else:
@@ -90,11 +93,11 @@ class Graph:
         colour_v = self.get_color(v)
         label_v = self.get_label(v)
         if colour_v != "":
-            f.write("a"+str(v) + label_v + colour_v + "\n")
+            f.write("a" + str(v) + label_v + colour_v + "\n")
 
         for t in self.data[v]:
             label_t = self.get_label(t)
-            f.write("a"+str(v) + label_v + "->" + "a"+str(t) + label_t + ";\n")
+            f.write("a" + str(v) + label_v + "->" + "a" + str(t) + label_t + ";\n")
             self.write_fitch_step1(t, f)
 
     def is_tree(self):
@@ -110,14 +113,13 @@ class Graph:
             bad_counter.pop(current_colour)
         most_common = bad_counter.most_common(1)
         if len(most_common) > 0 and most_common[0][1] > 1:
-            print("for vertex v = " +str(v)+" found 2 colours " + str(bad_counter.most_common(1)[0]))
+            print("for vertex v = " + str(v) + " found 2 colours " + str(bad_counter.most_common(1)[0]))
             exit(-1)
 
     def add_bad_vertex(self, v, c, intersection):
         for k in intersection:
-             if k != c:
+            if k != c:
                 self.bad[v].add(k)
-
 
     def fitch(self):
         self.fitch_step1(self.root)
@@ -126,7 +128,7 @@ class Graph:
     def fitch_step1(self, v):
         if len(self.data[v]) == 0:
             self.R[v] = {self.colors[v]}
-            self.add_bad_vertex(v, -1,list(self.R[v]))
+            self.add_bad_vertex(v, -1, list(self.R[v]))
             return
         for k in self.data[v]:
             self.fitch_step1(k)
@@ -137,7 +139,7 @@ class Graph:
             self.bad[v] = self.bad[v].union(self.bad[k])
             bad_counter.update(list(self.bad[k]))
 
-        #Ровно один цвет присутствует
+        # Ровно один цвет присутствует
         if len(intersection) == 1:
             res = set(intersection.keys())
             c = intersection.most_common(1)[0][0]
@@ -149,16 +151,17 @@ class Graph:
             if most_common_colours[1][1] > 1:
                 print("for vertex v=" + str(v) + "found more 2 colours" + str(most_common_colours))
                 exit(-1)
-            #Есть два поддерева в которых один и тот же цвет
+            # Есть два поддерева в которых один и тот же цвет
             elif most_common_colours[0][1] > 1:
                 self.R[v] = {most_common_colours[0][0]}
                 c = most_common_colours[0][0]
                 self.find_forgot_colour(bad_counter, c, v)
+                # self.bad[v].remove(c)
                 self.add_bad_vertex(v, c, intersection)
             else:
                 self.R[v] = set(intersection.keys())
                 self.add_bad_vertex(v, -1, list(intersection.keys()))
-                self.find_forgot_colour(bad_counter,-1,v)
+                self.find_forgot_colour(bad_counter, -1, v)
 
     def fitch_step2(self, v, parent):
         if self.colors[parent] in self.R[v]:
@@ -168,3 +171,27 @@ class Graph:
                 self.colors[v] = list(self.R[v])[0]
         for t in self.data[v]:
             self.fitch_step2(t, v)
+
+    def calculate(self, v):
+        if len(self.data[v]) == 0:
+            self.F[v] = x.as_poly(x)
+            self.H[v] = (x-x).as_poly(x)
+            self.G[v] = (x-x).as_poly(x)
+        else:
+            for k in self.data[v]:
+                self.calculate(k)
+            self.H[v] = (x**0).as_poly(x)
+            for i in self.data[v]:
+                self.H[v] = self.H[v] * (self.F[i]+ self.H[i])
+
+            self.G[v] = (x-x).as_poly(x)
+            for i in self.data[v]:
+                c = self.F[i] + self.G[i]
+                for j in self.data[v]:
+                    if i != j:
+                        c = c * (self.F[j] + self.H[j])
+                self.G[v] = self.G[v] + c
+            self.F[v] = (x ** 0).as_poly(x)
+            for i in self.data[v]:
+                self.F[v] = self.F[v] * (self.F[i] + self.H[i] + (self.F[i] + self.G[i])/x)
+            self.F[v] = x.as_poly(x) * self.F[v] - x.as_poly(x) * self.H[v] - self.G[v]
