@@ -1,7 +1,5 @@
 from collections import defaultdict
 
-from main import visualize
-
 __author__ = 'nikita'
 import networkx as nx
 import itertools
