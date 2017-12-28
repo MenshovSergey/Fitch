@@ -10,6 +10,8 @@ This program have 4 parameters:
     format:
         CE = edge vertex and colors of vertex. First line m (count edges), n (count vertex), c (count vertex has color). m lines (a b) a->b, 
             empty line, c lines (a color)
+        CDE = edge vertex and for every colors list of vertex. First line m (count edges), n (count vertex), k (count colors). m lines (a b) a->b,
+            empty line, k lines in every line vertex, which have one color.
         E = only edge vertex without colors
         N = extended newick format or newick format
     draw:
