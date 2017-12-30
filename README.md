@@ -28,3 +28,5 @@ This program have 4 parameters:
 Run example
 
     python3 --target=calc --format=CE --draw=True --name=test2
+    
+    Example input graph and coloring in test2 and test4 (input CE, CDE)
