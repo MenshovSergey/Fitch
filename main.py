@@ -1,7 +1,7 @@
 import os
 
 from Graph import Graph
-from brute_force_n import brute_force
+from brute_force_n import brute_force, is_convex_leaves
 from split_network import calculate_colorings
 
 
@@ -153,7 +153,7 @@ def main(name_f, format, target, draw):
         print("Unknown format " + format)
         return -1
     g.find_root()
-    if target == "fitch":
+    if target == "is_convex_tree":
         if format == "E":
             print("For fitch need only CE or N or CDE format")
         fitch(g, draw, name_f)
@@ -171,6 +171,14 @@ def main(name_f, format, target, draw):
         print("count convex coloring = " + str(c))
     elif target == "calc_network_cactus":
         calculate_colorings(name_f)
+
+    elif target == "is_convex_network":
+        g, colors = read_graph_colors(name_f)
+        res = is_convex_leaves(g, colors)
+        if res:
+            print("This graph has convex coloring")
+        else:
+            print("This graph don't have convex coloring")
     else:
         print("Unknown target" + target)
         return -1
@@ -180,10 +188,10 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--target")
-parser.add_argument("--format")
+parser.add_argument("--input")
 parser.add_argument("--draw", type=bool)
 parser.add_argument("--name")
 
 args = vars(parser.parse_args())
 
-main(args["name"], args["format"], args["target"], args["draw"])
+main(args["name"], args["input"], args["target"], args["draw"])
