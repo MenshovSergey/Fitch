@@ -3,7 +3,6 @@ from collections import OrderedDict
 from Graph import Graph
 from eNewickRead import eNewick_to_graph
 from generator import gen_coloring
-from main import visualize
 
 
 def get_bin_masks(size):

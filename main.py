@@ -38,7 +38,6 @@ def read_data(name_f):
     for i in range(count_color):
         n, c = f.readline().split(" ")
         graph.add_color(int(n), int(c))
-    graph.find_root()
     return graph
 
 
@@ -58,8 +57,40 @@ def read_graph_colors(name_f):
     for i in range(count_color):
         n, c = f.readline().split(" ")
         colors[n] = c
-    graph.find_root()
     return graph, colors
+
+
+def read_graph_dict_colors(name_f):
+    f = open(name_f, "r")
+    n, m, count_color = f.readline().split(" ")
+    n = int(n)
+    m = int(m)
+    count_color = int(count_color)
+    graph = Graph(m)
+    for i in range(n):
+        a, b = f.readline().split(" ")
+        graph.add_edge(int(a), int(b))
+    f.readline()
+
+    for i in range(count_color):
+        s = f.readline()
+        vals = s.split(" ")
+        for v in vals:
+            graph.add_color(int(v), i)
+
+    return graph
+
+
+def read_only_graph(name_f):
+    f = open(name_f, "r")
+    n, m = f.readline().split(" ")
+    n = int(n)
+    m = int(m)
+    graph = Graph(m)
+    for i in range(n):
+        a, b = f.readline().split(" ")
+        graph.add_edge(int(a), int(b))
+    return graph
 
 
 def find_pos_semicolon(s):
@@ -100,10 +131,6 @@ def newick_f(name_f):
     visualize(g, "fitch_res_" + name_f)
 
 
-def read_only_graph(name):
-    pass
-
-
 def fitch(g, need_draw, name_f):
     if need_draw:
         visualize(g, "start_" + name_f)
@@ -120,12 +147,15 @@ def main(name_f, format, target, draw):
         g = read_only_graph(name_f)
     elif format == "N":
         g = newick_f(name_f)
+    elif format == "CDE":
+        g = read_graph_dict_colors(name_f)
     else:
         print("Unknown format " + format)
         return -1
+    g.find_root()
     if target == "fitch":
-        if not (format == "CE" or format == "N"):
-            print("For fitch need only CE and N format")
+        if format == "E":
+            print("For fitch need only CE or N or CDE format")
         fitch(g, draw, name_f)
     elif target == "calc":
         if draw:
@@ -157,10 +187,3 @@ parser.add_argument("--name")
 args = vars(parser.parse_args())
 
 main(args["name"], args["format"], args["target"], args["draw"])
-
-# newick_f("test_newick")
-# newick_f("big_newick")
-# main("test3")
-# main("input.txt")
-# main("test/test3")
-# main("cactus")
