@@ -1,4 +1,4 @@
-# Fitch
+# Phylogeny-Comparison
 
 This program have 4 parameters:
 
