@@ -2,6 +2,7 @@
 
 1) task: the name of the problem to solve       
     count: find the number of convex colorings for a given tree/network;
+    
     check_if_convex: checks if a given coloring (partition on the set of leaves) is convex on a given tree or network. If True and the graph is a tree, also returns the corresponding minimal coloring of internal vertices.
 Example:
 	--task=count
@@ -17,10 +18,13 @@ Example:
 2) input_type:
 	Format of a graph:
 		E: list of edges: First line m (number of edges), n (number of vertex), then m lines (a b) a->b;
+		
 		N: Newick (or extennded Newick) format.
         Format of a coloring:
 		L:  C (number of colors); then list of leaves' colors  (leave, color), each in a separate line;
+		
 		P:  C (number of colors) lines; in the i-th line - a comma separated list of leaves having the i-th color
+		
 Possible values: EL, EP, NL, NP (if task=check_if_convex); E, N (if task = count).
 Example:
 	--input_type = EP
