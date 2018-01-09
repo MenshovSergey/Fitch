@@ -1,9 +1,8 @@
 # Phylogeny-Comparison
 
 1) task: the name of the problem to solve       
-    count: find the number of convex colorings for a given tree/network;
-    
-    check_if_convex: checks if a given coloring (partition on the set of leaves) is convex on a given tree or network. If True and the graph is a tree, also returns the corresponding minimal coloring of internal vertices.
+	count: find the number of convex colorings for a given tree/network;    
+    	check_if_convex: checks if a given coloring (partition on the set of leaves) is convex on a given tree or network. If 		True and the graph is a tree, also returns the corresponding minimal coloring of internal vertices.
 Example:
 	--task=count
 
