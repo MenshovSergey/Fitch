@@ -235,9 +235,6 @@ def gen_coloring(G):
     print(len(G.data))
 
     max_k = len(all_leaves(G, root))
-    if max_k > 14:
-        print("OHOOOOOOOOOOOO")
-        return set([])
     all_colorings = []
 
     for k in range(max_k):
