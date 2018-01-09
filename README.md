@@ -1,32 +1,62 @@
-# Fitch
+# Phylogeny-Comparison
 
-This program have 4 parameters:
+1) task: the name of the problem to solve       
+        count: find the number of convex colorings for a given tree/network;    
+        check_if_convex: checks if a given coloring (partition on the set of leaves) is convex on a given tree or network. 
+            If True and the graph is a tree, also returns the corresponding minimal coloring of internal vertices.
+            
+Example:
 
-    target:        
-        is_convex_tree = check if a given coloring (partition on the set of leaves) is convex on a given tree (upgraded Fitch's algorithm)
-            if convex, for every vertex find color
-        calc = find the number of convex colorings for a given tree. 
-        brute = calculate all possible convex colorings by brute force method
-        calc_network_cactus = find the number of convex colorings for a given cactus network.
-            It is more faster then brute
-    input:
-        Format for graph: First line m (count edges), n (count vertex),  m lines (a b) a->b.
-        Format for coloring:
-            1) C (count colors), in every line (line equals count of leaves) (a, color)
-            2) C (count colors) lines, on i lines list of vertex number, which has i-th color
-        CE = graph + 1 type of coloring
-        CDE = graph + 2 type of coloring
-        E = only edge vertex without colors
-        N = extended newick format for network
-    draw:
-        True = if need draw input graph. In the case of fitch, will be draw graph after every step
-            (about 2 step see article)
-        False = nothing draw
-    name:
-        name of input file
+    --task=count
 
-Run example
+2) input_graph: name of the input graph file
 
-    python3 --target=calc --format=CE --draw=True --name=test2
+Example:
+
+    --input_graph=test.tree
+
+3) input_coloring: name of the input coloring file
+
+Example:
+
+	--input_coloring=coloring.txt
+
+2) input_type:
+
+	Format of a graph:
+	
+		E: list of edges: First line m (number of edges), n (number of vertex), then m lines (a b) a->b;
+		
+		N: Newick (or extennded Newick) format.
+        Format of a coloring:
+		L:  C (number of colors); then list of leaves' colors  (leave, color), each in a separate line;
+		
+		P:  C (number of colors) lines; in the i-th line - a comma separated list of leaves having the i-th color
+		
+Possible values: EL, EP, NL, NP (if task=check_if_convex); E, N (if task = count).
+
+Example:
+
+    --input_type = EP
+
+5) draw (optional, =False by default):
+
+    if True, draw the input graph (with colored leaves, if given)
     
-    Example input graph and coloring in test2 and test4 (input CE, CDE)
+Example:
+ 
+	--draw=True
+
+Example 1:
+ 
+    python3 --task=check_if_convex --input_graph=test.dot --input_coloring=coloring1.txt --input_type = EL --draw = True
+
+Check if the coloring, given in coloring1.txt, is convex on the tree given in test.dot (as a list of edges), and draw the tree with the colored leaves.
+
+Example 2:
+
+    python3 --task=calc --input_graph=test.tree --input_type=N
+
+Count all the convex colorings on each network given in test.tree (in the eNewick format).
+
+
