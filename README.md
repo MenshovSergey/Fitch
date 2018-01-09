@@ -22,6 +22,7 @@ Example:
 	--input_coloring=coloring.txt
 
 2) input_type:
+
 	Format of a graph:
 		E: list of edges: First line m (number of edges), n (number of vertex), then m lines (a b) a->b;
 		
