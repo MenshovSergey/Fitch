@@ -24,6 +24,7 @@ Example:
 2) input_type:
 
 	Format of a graph:
+	
 		E: list of edges: First line m (number of edges), n (number of vertex), then m lines (a b) a->b;
 		
 		N: Newick (or extennded Newick) format.
@@ -39,6 +40,7 @@ Example:
     --input_type = EP
 
 5) draw (optional, =False by default):
+
     if True, draw the input graph (with colored leaves, if given)
     
 Example:
