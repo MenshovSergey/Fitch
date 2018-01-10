@@ -27,7 +27,7 @@ Example:
 	
 		E: list of edges: First line m (number of edges), n (number of vertex), then m lines (a b) a->b;
 		
-		N: Newick (or extennded Newick) format.
+		N: Newick (or extended Newick) format.
         Format of a coloring:
 		L:  C (number of colors); then list of leaves' colors  (leave, color), each in a separate line;
 		
