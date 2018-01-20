@@ -55,7 +55,7 @@ Check if the coloring, given in coloring1.txt, is convex on the tree given in te
 
 Example 2:
 
-    python3 --task=calc --input_graph=test.tree --input_type=N
+    python3 --task=count --input_graph=test.tree --input_type=N
 
 Count all the convex colorings on each network given in test.tree (in the eNewick format).
 

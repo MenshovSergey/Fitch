@@ -1,6 +1,7 @@
 from collections import Counter
-
 from sympy.abc import x
+
+
 class Graph:
     def __init__(self, vertex=0):
         if vertex > 0:
@@ -70,11 +71,26 @@ class Graph:
         else:
             return ""
 
+    def set_colors(self, colors):
+        self.colors = colors
+        for i in range(len(self.data)):
+            if not i in self.colors:
+                self.colors[i] = -1
+            else:
+                c = self.colors[i]
+                if c > self.max_color:
+                    self.max_color = c
+                if c in self.need_colors:
+                    self.need_colors[c] = 2
+                else:
+                    self.need_colors[c] = 1
+
+
     def get_label(self, v):
         return str(list(self.R[v])).replace("[", "a").replace("]", "").replace(",", "_").replace(" ", "")
 
     def write_dfs_start(self, v, f):
-        self.write_dfs(v, f, [-1] * len(self.colors))
+        self.write_dfs(v, f, [-1] * len(self.data))
 
     def write_dfs(self, v, f, used):
         if used[v] == -1:
@@ -175,16 +191,16 @@ class Graph:
     def calculate(self, v):
         if len(self.data[v]) == 0:
             self.F[v] = x.as_poly(x)
-            self.H[v] = (x-x).as_poly(x)
-            self.G[v] = (x-x).as_poly(x)
+            self.H[v] = (x - x).as_poly(x)
+            self.G[v] = (x - x).as_poly(x)
         else:
             for k in self.data[v]:
                 self.calculate(k)
-            self.H[v] = (x**0).as_poly(x)
+            self.H[v] = (x ** 0).as_poly(x)
             for i in self.data[v]:
-                self.H[v] = self.H[v] * (self.F[i]+ self.H[i])
+                self.H[v] = self.H[v] * (self.F[i] + self.H[i])
 
-            self.G[v] = (x-x).as_poly(x)
+            self.G[v] = (x - x).as_poly(x)
             for i in self.data[v]:
                 c = self.F[i] + self.G[i]
                 for j in self.data[v]:
@@ -193,5 +209,5 @@ class Graph:
                 self.G[v] = self.G[v] + c
             self.F[v] = (x ** 0).as_poly(x)
             for i in self.data[v]:
-                self.F[v] = self.F[v] * (self.F[i] + self.H[i] + (self.F[i] + self.G[i])/x)
+                self.F[v] = self.F[v] * (self.F[i] + self.H[i] + (self.F[i] + self.G[i]) / x)
             self.F[v] = x.as_poly(x) * self.F[v] - x.as_poly(x) * self.H[v] - self.G[v]

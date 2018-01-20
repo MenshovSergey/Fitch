@@ -66,8 +66,8 @@ def tree_variations(network):
     return tree_variations_arr
 
 
-def calculate_colorings(name_f):
-    network_list = eNewick_to_graph(name_f)
+def calculate_colorings(network_list):
+    # network_list = eNewick_to_graph(name_f)
     # for topology in network_list:
     #     leaves_number = topology.get_leaves()
     #     t = time.time()

@@ -1,6 +1,7 @@
+import networkx as nx
+
 import phylonetwork3
 from Graph import Graph
-import networkx as nx
 
 
 def eNewick_to_graph(eNewick_file):
@@ -62,7 +63,7 @@ def eNewick_to_networkx(eNewick_file):
             a, b = e
             topology.add_edge(a, b)
         graph_list.append(topology)
-    return graph_list3
+    return graph_list
 
 
 if __name__ == '__main__':
