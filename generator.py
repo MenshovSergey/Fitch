@@ -232,7 +232,7 @@ def gen_coloring(G):
     # G.add_edge(7,9)
 
     root = G.find_root()
-    print(len(G.data))
+    print("count vertex in graph = " + str(len(G.data)))
 
     max_k = len(all_leaves(G, root))
     all_colorings = []
@@ -247,8 +247,8 @@ def gen_coloring(G):
         for hh in Hc:
             all_colorings.append(dict_to_tuple(hh))
 
-    print(time.clock() - start)
-    print(len(all_colorings))
+    print("time for generate coloring = " + str(time.clock() - start))
+    print("count all colorings for this graph = "+ str(len(all_colorings)))
     return set(all_colorings)
     # print(Fc)
     # print(Gc)

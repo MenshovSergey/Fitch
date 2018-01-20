@@ -8,6 +8,7 @@ from generator import gen_coloring
 def get_bin_masks(size):
     return [[int(i) for i in format(x, 'b').zfill(size)] for x in range(2 ** size)]
 
+
 def remove_new_leaves(network, new_tree):
     rem = []
     for i, v in enumerate(new_tree.data):
@@ -15,6 +16,7 @@ def remove_new_leaves(network, new_tree):
             if len(network.data[i]) > 0:
                 rem.append(i)
     return rem
+
 
 def create(child_list, all_income_edge, homoplasy_set, homoplasy, mask, bad):
     topology = Graph(len(child_list))
@@ -31,6 +33,7 @@ def create(child_list, all_income_edge, homoplasy_set, homoplasy, mask, bad):
         a, b = all_income_edge[homoplasy[i]][mask[i]]
         topology.add_edge(a, b)
     return topology
+
 
 def tree_variations(network):
     child_list = network.data
@@ -60,7 +63,7 @@ def tree_variations(network):
             topology.add_edge(a, b)
 
         bad = remove_new_leaves(network, topology)
-        topology = create(child_list, all_income_edge,homoplasy_set, homoplasy, mask, bad)
+        topology = create(child_list, all_income_edge, homoplasy_set, homoplasy, mask, bad)
         tree_variations_arr.append(topology)
     print("start\n")
     return tree_variations_arr
@@ -76,10 +79,11 @@ def calculate_colorings(network_list):
 
     # network_list[0].find_root()
     # visualize(network_list[0], "network14")
-    for i in network_list:
+    for i, v in enumerate(network_list):
         all_answer = set([])
-        for tree in tree_variations(i):
+        for tree in tree_variations(v):
             all_answer = all_answer.union(gen_coloring(tree))
-            print(len(all_answer))
-        print("calculate")
-        print(len(all_answer))
+            print("current count all colorings = " + str(len(all_answer))+"\n")
+        print("calculate for " + str(i) + " network")
+        print("count convex coloring = " + str(len(all_answer))+"\n")
+        print("")

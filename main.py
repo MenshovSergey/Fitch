@@ -146,8 +146,11 @@ def main(input_graph, input_type, task, input_coloring, draw=False):
             print("UNKNOWN FORMAT " + input_type[1])
             return -1
 
-    g.find_root()
-    is_tree = g.is_tree()
+    if type(g) == list:
+        is_tree = False
+    else:
+        g.find_root()
+        is_tree = g.is_tree()
     if task == "check_if_convex":
         if is_tree:
             g.set_colors(colors)
@@ -170,36 +173,6 @@ def main(input_graph, input_type, task, input_coloring, draw=False):
     else:
         print("UNKNOWN TASK " + task)
         return -1
-    # if task == "is_convex_tree":
-    #     if input_type == "E":
-    #         print("For fitch need only CE or N or CDE format")
-    #     fitch(g, draw, input_graph)
-    # elif task == "calc":
-    #     if draw:
-    #         visualize(g, "start_" + input_graph)
-    #     g.calculate(g.root)
-    #     print("F(root) = " + str(g.F[g.root]))
-    #     print("H(root) = " + str(g.H[g.root]))
-    #     print("G(root) = " + str(g.G[g.root]))
-    #     print("F(root) + H(root) = " + str(g.F[g.root] + g.H[g.root]))
-    # elif task == "brute":
-    #     g, colors = read_graph_colors(input_graph)
-    #     c = brute_force(g, colors)
-    #     print("count convex coloring = " + str(c))
-    # elif task == "calc_network_cactus":
-    #     calculate_colorings(input_graph)
-    #
-    # elif task == "is_convex_network":
-    #     g, colors = read_graph_colors(input_graph)
-    #     res = is_convex_leaves(g, colors)
-    #     if res:
-    #         print("This graph has convex coloring")
-    #     else:
-    #         print("This graph don't have convex coloring")
-    # else:
-    #     print("Unknown target" + task)
-    #     return -1
-
 
 import argparse
 
