@@ -27,7 +27,7 @@ Example:
 	
 		E: list of edges: First line m (number of edges), n (number of vertex), then m lines (a b) a->b;
 		
-		N: Newick (or extennded Newick) format.
+		N: Newick (or extended Newick) format.
         Format of a coloring:
 		L:  C (number of colors); then list of leaves' colors  (leave, color), each in a separate line;
 		
@@ -49,13 +49,13 @@ Example:
 
 Example 1:
  
-    python3 --task=check_if_convex --input_graph=test.dot --input_coloring=coloring1.txt --input_type = EL --draw = True
+    python3 main.py --task=check_if_convex --input_graph=test.dot --input_coloring=coloring1.txt --input_type = EL --draw = True
 
 Check if the coloring, given in coloring1.txt, is convex on the tree given in test.dot (as a list of edges), and draw the tree with the colored leaves.
 
 Example 2:
 
-    python3 --task=count --input_graph=test.tree --input_type=N
+    python3 main.py --task=calc --input_graph=test.tree --input_type=N
 
 Count all the convex colorings on each network given in test.tree (in the eNewick format).
 
