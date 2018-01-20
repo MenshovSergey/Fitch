@@ -49,9 +49,15 @@ Example:
 
 Example 1:
  
-    python3 main.py --task=check_if_convex --input_graph=test.dot --input_coloring=coloring1.txt --input_type = EL --draw = True
+    python3 main.py --task=check_if_convex --input_graph=test2 --input_coloring=test2_coloring_l --input_type=EL --draw=True
 
-Check if the coloring, given in coloring1.txt, is convex on the tree given in test.dot (as a list of edges), and draw the tree with the colored leaves.
+Check if the coloring, given in =test2_coloring_l, is convex on the tree given in test2 (as a list of edges), and draw the tree with the colored leaves.
+
+Example 2:
+
+     python3 main.py --task=check_if_convex --input_graph=test2 --input_coloring=test2_coloring_p --input_type=EP --draw=True
+
+Same as example 1, but difference in coloring format
 
 Example 2:
 

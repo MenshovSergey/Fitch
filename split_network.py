@@ -86,4 +86,3 @@ def calculate_colorings(network_list):
             print("current count all colorings = " + str(len(all_answer))+"\n")
         print("calculate for " + str(i) + " network")
         print("count convex coloring = " + str(len(all_answer))+"\n")
-        print("")

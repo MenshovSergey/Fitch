@@ -83,14 +83,15 @@ def read_graph_colors(name_f):
 #             graph.add_color(int(v), i)
 #
 #     return graph
-def read_only_colors_p(f):
+def read_only_colors_p(input_coloring):
     res = {}
+    f = open(input_coloring, "r")
     count_colour = int(f.readline())
     for i in range(count_colour):
         s = f.readline()
         leaves = s.split(" ")
         for v in leaves:
-            res[i] = v
+            res[int(v)] = i
 
     return res
 
@@ -173,6 +174,7 @@ def main(input_graph, input_type, task, input_coloring, draw=False):
     else:
         print("UNKNOWN TASK " + task)
         return -1
+
 
 import argparse
 
