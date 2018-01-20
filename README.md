@@ -49,13 +49,13 @@ Example:
 
 Example 1:
  
-    python3 --task=check_if_convex --input_graph=test.dot --input_coloring=coloring1.txt --input_type = EL --draw = True
+    python3 main.py --task=check_if_convex --input_graph=test.dot --input_coloring=coloring1.txt --input_type = EL --draw = True
 
 Check if the coloring, given in coloring1.txt, is convex on the tree given in test.dot (as a list of edges), and draw the tree with the colored leaves.
 
 Example 2:
 
-    python3 --task=calc --input_graph=test.tree --input_type=N
+    python3 main.py --task=calc --input_graph=test.tree --input_type=N
 
 Count all the convex colorings on each network given in test.tree (in the eNewick format).
 
