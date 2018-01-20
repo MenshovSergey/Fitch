@@ -59,7 +59,7 @@ Example 2:
 
 Same as example 1, but difference in coloring format
 
-Example 2:
+Example 3:
 
     python3 main.py --task=count --input_graph=test.tree --input_type=N
 
