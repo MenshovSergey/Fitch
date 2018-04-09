@@ -1,4 +1,4 @@
-# Phylogeny-Comparison
+# Phylogeny-Comparsion
 
 1) task: the name of the problem to solve       
         count: find the number of convex colorings for a given tree/network;    
